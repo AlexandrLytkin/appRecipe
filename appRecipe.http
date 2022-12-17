@@ -1,0 +1,14 @@
+### Получение всех рецептов
+GET http://localhost:8080/recipe
+
+### Получение всех ингредиентов
+GET http://localhost:8080/ingredient
+
+### Добавить рецепт
+POST http://localhost:8080/recipe
+Content-Type: application/json
+
+{
+  "name": "Test1",
+  "timeOfCook": 10
+}
