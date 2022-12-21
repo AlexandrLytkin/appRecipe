@@ -38,4 +38,23 @@ public class RecipeServiceImpl implements RecipeService {
             throw new RuntimeException("Нет такого рецепта");
         }
     }
+
+    @Override
+    public Recipe updateRecipe(int id, Recipe recipe) {
+        Recipe currentRecipe = recipes.get(id);
+        if (currentRecipe == null) {
+            throw new RuntimeException("Такого id рецепта нет!");
+        }
+        currentRecipe.setName(recipe.getName());
+        currentRecipe.setIngredients(recipe.getIngredients());
+        currentRecipe.setSteps(recipe.getSteps());
+        currentRecipe.setTimeOfCook(recipe.getTimeOfCook());
+        return currentRecipe;
+    }
+
+    @Override
+    public Recipe removeRecipe(int id) {
+        return recipes.remove(id);
+    }
+
 }

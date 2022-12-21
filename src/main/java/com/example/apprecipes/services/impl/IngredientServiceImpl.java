@@ -30,7 +30,6 @@ public class IngredientServiceImpl implements IngredientService {
         return ingredient;
     }
 
-
     @Override
     public Ingredient getIngredientById(int id) {
         if (ingredients.containsKey(id)) {
@@ -38,6 +37,23 @@ public class IngredientServiceImpl implements IngredientService {
         } else {
             throw new RuntimeException("Нет такого ингредиента");
         }
+    }
+
+    @Override
+    public Ingredient updateIngredient(int id, Ingredient recipe) {
+        Ingredient currentIngredient = ingredients.get(id);
+        if (currentIngredient == null) {
+            throw new RuntimeException("Такого id рецепта нет!");
+        }
+        currentIngredient.setName(recipe.getName());
+        currentIngredient.setCount(recipe.getCount());
+        currentIngredient.setMeasure(recipe.getMeasure());
+        return currentIngredient;
+    }
+
+    @Override
+    public Ingredient removeIngredient(int id) {
+        return ingredients.remove(id);
     }
 
 }
