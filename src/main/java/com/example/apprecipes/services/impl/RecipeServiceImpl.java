@@ -1,5 +1,6 @@
 package com.example.apprecipes.services.impl;
 
+import com.example.apprecipes.model.NotWrongArgument;
 import com.example.apprecipes.model.Recipe;
 import com.example.apprecipes.services.RecipeService;
 import org.springframework.stereotype.Service;
@@ -21,9 +22,9 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Recipe addNewRecipe(Recipe recipe) {
+    public Recipe add(Recipe recipe) throws NotWrongArgument {
         if (recipes.containsKey(id)) {
-            throw new RuntimeException("Не может добавить рецепт с таким же id");
+            throw new NotWrongArgument("Не может добавить рецепт с таким же id");
         } else {
             recipes.put(id++, recipe);
         }
@@ -31,19 +32,19 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Recipe getRecipeById(int id) {
+    public Recipe getOne(int id) throws NotWrongArgument {
         if (recipes.containsKey(id)) {
             return recipes.get(id);
         } else {
-            throw new RuntimeException("Нет такого рецепта");
+            throw new NotWrongArgument("Нет такого рецепта");
         }
     }
 
     @Override
-    public Recipe updateRecipe(int id, Recipe recipe) {
+    public Recipe update(int id, Recipe recipe) throws NotWrongArgument {
         Recipe currentRecipe = recipes.get(id);
         if (currentRecipe == null) {
-            throw new RuntimeException("Такого id рецепта нет!");
+            throw new NotWrongArgument("Такого id рецепта нет!");
         }
         currentRecipe.setName(recipe.getName());
         currentRecipe.setIngredients(recipe.getIngredients());
@@ -53,7 +54,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Recipe removeRecipe(int id) {
+    public Recipe delete(int id) {
         return recipes.remove(id);
     }
 
