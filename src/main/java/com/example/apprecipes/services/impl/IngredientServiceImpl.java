@@ -21,6 +21,7 @@ public class IngredientServiceImpl implements IngredientService {
         return ingredients.values();
     }
 
+
     @Override
     public Ingredient add(Ingredient ingredient) {
         if (ingredients.containsKey(id)) {

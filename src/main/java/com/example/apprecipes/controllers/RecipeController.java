@@ -59,17 +59,38 @@ public class RecipeController {
 
     @PostMapping
     @Operation(
-            summary = "Добавьте рецепт"
+            summary = "Добавьте рецепт",
+            description = "используй способ добавления application/json"
     )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Рецепты были найдены",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = Recipe.class))
+                            )
+                    }
+            )
+    })
     public Recipe addRecipe(@RequestBody Recipe recipe) throws NotWrongArgument {
         return this.recipeService.add(recipe);
     }
 
+    @Operation(
+            summary = "Обновите рецепт ",
+            description = "Введите id рецепта который хотите обновить и сам рецепт application/json"
+    )
     @PutMapping("/{id}")
     public Recipe updateRecipe(@PathVariable("id") int id, @RequestBody Recipe recipe) throws NotWrongArgument {
         return this.recipeService.update(id, recipe);
     }
 
+    @Operation(
+            summary = "Удалить рецепт ",
+            description = "введите id рецепта который хотите удалить"
+    )
     @DeleteMapping("/{id}")
     public Recipe removeRecipe(@PathVariable("id") int id) {
         return this.recipeService.delete(id);
