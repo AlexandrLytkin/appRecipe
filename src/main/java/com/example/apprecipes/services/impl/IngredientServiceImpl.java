@@ -22,7 +22,7 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public Ingredient add(Ingredient ingredient) throws NotWrongArgument {
+    public Ingredient add(Ingredient ingredient) {
         if (ingredients.containsKey(id)) {
             throw new NotWrongArgument("Не может добавить ингредиент с таким же id");
         } else {
@@ -32,7 +32,7 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public Ingredient getOne(int id) throws NotWrongArgument {
+    public Ingredient getOne(int id) {
         if (ingredients.containsKey(id)) {
             return ingredients.get(id);
         } else {
@@ -41,7 +41,7 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public Ingredient update(int id, Ingredient recipe) throws NotWrongArgument {
+    public Ingredient update(int id, Ingredient recipe) {
         Ingredient currentIngredient = ingredients.get(id);
         if (currentIngredient == null) {
             throw new NotWrongArgument("Такого id рецепта нет!");
