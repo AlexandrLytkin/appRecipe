@@ -6,16 +6,13 @@ import java.util.Collection;
 
 public interface RecipeService {
 
-
     Collection<Recipe> getAll();
 
+    Recipe add(Recipe recipe);
 
-    Recipe addNewRecipe(Recipe recipe);
+    Recipe getOne(int idRecipe);
 
+    Recipe update(int id, Recipe recipe);
 
-    Recipe getRecipeById(int idRecipe);
-
-    Recipe updateRecipe(int id, Recipe recipe);
-
-    Recipe removeRecipe(int id);
+    Recipe delete(int id);
 }

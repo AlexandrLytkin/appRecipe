@@ -8,11 +8,11 @@ public interface IngredientService {
 
     Collection<Ingredient> getAll();
 
-    Ingredient addNewIngredient(Ingredient ingredient);
+    Ingredient add(Ingredient ingredient);
 
-    Ingredient getIngredientById(int idIngredient);
+    Ingredient getOne(int idIngredient);
 
-    Ingredient updateIngredient(int id, Ingredient recipe);
+    Ingredient update(int id, Ingredient recipe);
 
-    Ingredient removeIngredient(int id);
+    Ingredient delete(int id);
 }

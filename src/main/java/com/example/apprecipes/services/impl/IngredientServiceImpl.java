@@ -1,17 +1,18 @@
 package com.example.apprecipes.services.impl;
 
 import com.example.apprecipes.model.Ingredient;
+import com.example.apprecipes.model.NotWrongArgument;
 import com.example.apprecipes.services.IngredientService;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 @Service
 public class IngredientServiceImpl implements IngredientService {
 
-    private static Map<Integer, Ingredient> ingredients = new TreeMap<>();
+    private static Map<Integer, Ingredient> ingredients = new HashMap<>();
     private static int id = 0;
 
 
@@ -20,10 +21,11 @@ public class IngredientServiceImpl implements IngredientService {
         return ingredients.values();
     }
 
+
     @Override
-    public Ingredient addNewIngredient(Ingredient ingredient) {
+    public Ingredient add(Ingredient ingredient) {
         if (ingredients.containsKey(id)) {
-            throw new RuntimeException("Не может добавить ингредиент с таким же id");
+            throw new NotWrongArgument("Не может добавить ингредиент с таким же id");
         } else {
             ingredients.put(id++, ingredient);
         }
@@ -31,19 +33,19 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public Ingredient getIngredientById(int id) {
+    public Ingredient getOne(int id) {
         if (ingredients.containsKey(id)) {
             return ingredients.get(id);
         } else {
-            throw new RuntimeException("Нет такого ингредиента");
+            throw new NotWrongArgument("Нет такого ингредиента");
         }
     }
 
     @Override
-    public Ingredient updateIngredient(int id, Ingredient recipe) {
+    public Ingredient update(int id, Ingredient recipe) {
         Ingredient currentIngredient = ingredients.get(id);
         if (currentIngredient == null) {
-            throw new RuntimeException("Такого id рецепта нет!");
+            throw new NotWrongArgument("Такого id рецепта нет!");
         }
         currentIngredient.setName(recipe.getName());
         currentIngredient.setCount(recipe.getCount());
@@ -52,7 +54,7 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public Ingredient removeIngredient(int id) {
+    public Ingredient delete(int id) {
         return ingredients.remove(id);
     }
 
