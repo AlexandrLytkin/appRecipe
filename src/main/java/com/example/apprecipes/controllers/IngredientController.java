@@ -38,6 +38,13 @@ public class IngredientController {
             summary = "Получить один ингридиент по id",
             description = "Введите номер id ингридиента"
     )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200",
+                    content = {
+                            @Content(mediaType = "application/json")
+                    }),
+            @ApiResponse(responseCode = "404", description = "Ингридиент не найден", content = {})
+    })
     public Ingredient getIngredientById(@PathVariable("id") int id) throws NotWrongArgument {
         return this.ingredientService.getOne(id);
     }
