@@ -51,6 +51,13 @@ public class RecipeController {
             summary = "Получить один рецепт по id",
             description = "Введите номер id рецепта"
     )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200",
+                    content = {
+                            @Content(mediaType = "application/json")
+                    }),
+            @ApiResponse(responseCode = "404", description = "Рецепт не найден", content = {})
+    })
     public Recipe getRecipeById(@PathVariable("id") int id) throws NotWrongArgument {
         return this.recipeService.getOne(id);
     }
