@@ -4,6 +4,7 @@ import com.example.apprecipes.services.FileIngredientService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,7 +38,22 @@ public class FileIngredientServiceImpl implements FileIngredientService {
         }
     }
 
-    private boolean cleanDataFileIngredients() {
+    @Override
+    public File getDataFile() {   //метод возвращает сам файл
+        return new File(dataFilePathIngredients + "/" + dataFileNameIngredients);
+    }
+
+    @Override
+    public Path createTempFile(String suffix) {
+        try {
+            return Files.createTempFile(Path.of(dataFilePathIngredients),"tempeFile", suffix);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public boolean cleanDataFileIngredients() {
         try {
             Path path = Path.of(dataFilePathIngredients, dataFileNameIngredients);
             Files.deleteIfExists(path);
