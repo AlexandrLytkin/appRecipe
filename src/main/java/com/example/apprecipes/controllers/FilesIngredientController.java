@@ -1,5 +1,6 @@
 package com.example.apprecipes.controllers;
 
+import com.example.apprecipes.model.NotWrongArgument;
 import com.example.apprecipes.services.FileIngredientService;
 import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.InputStreamResource;
@@ -50,7 +51,7 @@ public class FilesIngredientController {
             return ResponseEntity.ok().build();
         } catch (IOException e) {
             e.printStackTrace();
+            throw new NotWrongArgument(e);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 }
