@@ -4,6 +4,7 @@ import com.example.apprecipes.services.FilesRecipeService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -36,7 +37,22 @@ public class FilesRecipeServiceImpl implements FilesRecipeService {
         }
     }
 
-    private boolean cleanDataFile() {
+    @Override
+    public File getDataFile() {   //метод возвращает сам файл
+        return new File(dataFilePath + "/" + dataFileName);
+    }
+
+    @Override
+    public Path createTempFile(String suffix) {
+        try {
+            return Files.createTempFile(Path.of(dataFilePath),"tempeFile", suffix);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public boolean cleanDataFile() {
         try {
             Path path = Path.of(dataFilePath, dataFileName);
             Files.deleteIfExists(path);
