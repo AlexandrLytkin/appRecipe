@@ -1,7 +1,7 @@
 package com.example.apprecipes.services.impl;
 
 import com.example.apprecipes.model.Ingredient;
-import com.example.apprecipes.model.NotWrongArgument;
+import com.example.apprecipes.exeptions.NotWrongArgument;
 import com.example.apprecipes.services.IngredientService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;

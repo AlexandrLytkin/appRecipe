@@ -1,5 +1,6 @@
 package com.example.apprecipes.services.impl;
 
+import com.example.apprecipes.exeptions.WrongUploadFileException;
 import com.example.apprecipes.services.FilesRecipeService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ public class FilesRecipeServiceImpl implements FilesRecipeService {
     public boolean safeToFile(String json) {
         try {
             cleanDataFile();
-            Files.writeString(Path.of(dataFilePath, dataFileName),json);
+            Files.writeString(Path.of(dataFilePath, dataFileName), json);
             return true;
         } catch (IOException e) {
             return false;
@@ -38,16 +39,16 @@ public class FilesRecipeServiceImpl implements FilesRecipeService {
     }
 
     @Override
-    public File getDataFile() {   //метод возвращает сам файл
+    public File getDataFile() {
         return new File(dataFilePath + "/" + dataFileName);
     }
 
     @Override
-    public Path createTempFile(String suffix) {
+    public Path createTempFile(String suffix) { // ветка 6 метод ? создаем временый файл
         try {
-            return Files.createTempFile(Path.of(dataFilePath),"tempeFile", suffix);
+            return Files.createTempFile(Path.of(dataFilePath), "tempFile", suffix);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new WrongUploadFileException(e);
         }
     }
 

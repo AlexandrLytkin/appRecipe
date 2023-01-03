@@ -1,15 +1,20 @@
 package com.example.apprecipes.services.impl;
 
-import com.example.apprecipes.model.NotWrongArgument;
+import com.example.apprecipes.exeptions.NotWrongArgument;
 import com.example.apprecipes.model.Recipe;
 import com.example.apprecipes.services.FilesRecipeService;
 import com.example.apprecipes.services.RecipeService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
@@ -73,6 +78,19 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public Recipe delete(int id) {
         return recipes.remove(id);
+    }
+
+    @Override
+    public void addRecipeFromInputStream(InputStream inputStream) throws IOException { // ветка 6 метод ?
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))){
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] array = StringUtils.split(line, '|');
+                Recipe recipe = new Recipe();
+                add(recipe);
+            }
+        }
     }
 
     private void safeToFile() {

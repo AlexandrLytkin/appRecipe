@@ -1,7 +1,7 @@
 package com.example.apprecipes.controllers;
 
 import com.example.apprecipes.model.Ingredient;
-import com.example.apprecipes.model.NotWrongArgument;
+import com.example.apprecipes.exeptions.NotWrongArgument;
 import com.example.apprecipes.model.Recipe;
 import com.example.apprecipes.services.IngredientService;
 import io.swagger.v3.oas.annotations.Operation;
