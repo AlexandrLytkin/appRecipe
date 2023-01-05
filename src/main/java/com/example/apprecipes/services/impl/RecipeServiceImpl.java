@@ -7,17 +7,18 @@ import com.example.apprecipes.services.RecipeService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Collection;
-import java.util.Map;
-import java.util.TreeMap;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.util.*;
 
 @Service
 public class RecipeServiceImpl implements RecipeService {
@@ -28,7 +29,11 @@ public class RecipeServiceImpl implements RecipeService {
 
     @PostConstruct
     private void initialize() {
-        readFromFile();
+        try {
+            readFromFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private final FilesRecipeService filesRecipeService;
@@ -81,13 +86,25 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    public Path createRecipeReport() throws IOException {  //  ветка 6 метод ?
+        Path path = filesRecipeService.createTempFile("все рецепты");
+        for (Recipe recipe : recipes.values()) {
+            try (Writer writer = Files.newBufferedWriter(path, StandardOpenOption.APPEND)) {
+                writer.append("Название рецепта: " + recipe.getName() + "\nВремя приготовления " + recipe.getTimeOfCook() + ": мин\nИнгредиенты: " + recipe.getIngredients() + ": \nШаги приготовления:\n" + recipe.getSteps());
+                writer.append("\n");
+            }
+        }
+        return path;
+    }
+
+    @Override
     public void addRecipeFromInputStream(InputStream inputStream) throws IOException { // ветка 6 метод ?
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))){
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] array = StringUtils.split(line, '|');
-                Recipe recipe = new Recipe();
+                Recipe recipe = new Recipe(array[0], Integer.valueOf(array[1]), new ArrayList<>(), new ArrayList<>());
                 add(recipe);
             }
         }
@@ -95,7 +112,8 @@ public class RecipeServiceImpl implements RecipeService {
 
     private void safeToFile() {
         try {
-            String json = new ObjectMapper().writeValueAsString(recipes);
+            DataFile dataFile = new DataFile(id, (TreeMap<Integer, Recipe>) recipes);
+            String json = new ObjectMapper().writeValueAsString(dataFile);
             filesRecipeService.safeToFile(json);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
@@ -105,10 +123,21 @@ public class RecipeServiceImpl implements RecipeService {
     private void readFromFile() {
         try {
             String json = filesRecipeService.readFromFile();
-            recipes = new ObjectMapper().readValue(json, new TypeReference<TreeMap<Integer,Recipe>>() {
+            DataFile dataFile = new ObjectMapper().readValue(json, new TypeReference<DataFile>() {
             });
+            id = dataFile.getId();
+            recipes = dataFile.getRecipes();
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    private static class DataFile {
+
+        private int id;
+        private TreeMap<Integer, Recipe> recipes;
     }
 }

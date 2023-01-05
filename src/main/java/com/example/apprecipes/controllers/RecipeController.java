@@ -10,13 +10,18 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collection;
 
 @RestController
@@ -50,6 +55,7 @@ public class RecipeController {
     public Collection<Recipe> getAllRecipe() {
         return recipeService.getAll();
     }
+
 
     @GetMapping("/{id}")
     @Operation(
@@ -106,9 +112,28 @@ public class RecipeController {
         return this.recipeService.delete(id);
     }
 
+    @GetMapping("/recipes/all")
+    public ResponseEntity<Object> getRecipeAll() {
+        try {
+            Path path = recipeService.createRecipeReport();
+            if (Files.size(path) == 0) {
+                return ResponseEntity.noContent().build();
+            }
+                InputStreamResource resource = new InputStreamResource(new FileInputStream(path.toFile()));
+                return ResponseEntity.ok()
+                        .contentType(MediaType.TEXT_PLAIN)
+                        .contentLength(Files.size(path))
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"Recipe -report.txt\"")
+                        .body(resource);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body(e.toString());
+        }
+    }
+
     @PostMapping(value = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE) // ветка 6 метод ?
-    public ResponseEntity<Object> addRecipeFromFile(@RequestParam MultipartFile file) {
-        try (InputStream stream = file.getInputStream()){
+    public ResponseEntity<Object> addRecipesFromFile(@RequestParam MultipartFile file) {
+        try (InputStream stream = file.getInputStream()) {
             recipeService.addRecipeFromInputStream(stream);
             return ResponseEntity.ok().build();
         } catch (IOException e) {
