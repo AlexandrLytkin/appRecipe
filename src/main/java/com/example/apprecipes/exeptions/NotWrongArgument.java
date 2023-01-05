@@ -1,4 +1,4 @@
-package com.example.apprecipes.model;
+package com.example.apprecipes.exeptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

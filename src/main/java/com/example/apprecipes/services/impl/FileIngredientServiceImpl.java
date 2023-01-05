@@ -1,6 +1,6 @@
 package com.example.apprecipes.services.impl;
 
-import com.example.apprecipes.model.NotWrongArgument;
+import com.example.apprecipes.exeptions.WrongUploadFileException;
 import com.example.apprecipes.services.FileIngredientService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -47,9 +47,9 @@ public class FileIngredientServiceImpl implements FileIngredientService {
     @Override
     public Path createTempFile(String suffix) {
         try {
-            return Files.createTempFile(Path.of(dataFilePathIngredients),"tempeFile", suffix);
+            return Files.createTempFile(Path.of(dataFilePathIngredients),"tempFile", suffix);
         } catch (IOException e) {
-            throw new NotWrongArgument(e);
+            throw new WrongUploadFileException(e);
         }
     }
 

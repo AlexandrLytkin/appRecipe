@@ -15,4 +15,14 @@ public class Recipe {
     private int timeOfCook;
     private List<Ingredient> ingredients;
     private List<String> steps;
+
+    @Override
+    public String toString() {
+        return "Рецепт{" +
+                "название " + name + '\'' +
+                ", timeOfCook=" + timeOfCook +
+                ", ingredients=" + ingredients +
+                ", steps=" + steps +
+                '}';
+    }
 }

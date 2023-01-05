@@ -1,11 +1,10 @@
 package com.example.apprecipes.controllers;
 
-import com.example.apprecipes.model.NotWrongArgument;
+import com.example.apprecipes.exeptions.WrongUploadFileException;
 import com.example.apprecipes.services.FileIngredientService;
 import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,7 +50,7 @@ public class FilesIngredientController {
             return ResponseEntity.ok().build();
         } catch (IOException e) {
             e.printStackTrace();
-            throw new NotWrongArgument(e);
+            throw new WrongUploadFileException(e);
         }
     }
 }

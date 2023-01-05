@@ -12,4 +12,12 @@ public class Ingredient {
     private String name;
     private int count;
     private String measure;
+
+    @Override
+    public String toString() {
+        return "\n" +
+                "*" + name +
+                " = " + count +
+                " " + measure;
+    }
 }
